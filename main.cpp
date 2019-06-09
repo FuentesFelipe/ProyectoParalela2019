@@ -5,19 +5,17 @@
 
 #include "funciones.h"
 #include "docente_curso.h"
+#include "disponibilidad_horaria.h"
 
 using namespace std;
 
 int main(){
+    vector<DisponibilidadHoraria> vectorPrueba = llenarVectorDisponibilidadHoraria();
+
+    for(int i = 0; i < vectorPrueba.size(); i++)
+        vectorPrueba[i].mostrarDatos();
     
-    vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
-
-    for(int i = 0; i < vectorDocenteCurso.size(); i++){
-        vectorDocenteCurso[i].mostrarDatos();
-    }
-
-
-
+    
 
     return 0;
 }
