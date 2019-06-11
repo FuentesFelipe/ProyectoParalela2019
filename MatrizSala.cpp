@@ -3,10 +3,15 @@
 
 using namespace std;
 
-MatrizSala::MatrizSala(){
+MatrizSala::MatrizSala(std::string edificioSala){
+    /*
+    *   Constructor que recibe el formato "M1-X0Y"
+    *   y llena su matriz de disponibilidad con vacios "EMPTY"
+    *   
+    *  */
     this->full = false;
-    this->idSala = VACIA;
-    this->bloquesDisponibles = OFERTA;
+    this->idSala = edificioSala;
+    this->bloquesDisponibles = OFERTA; //OFERTA = 39 constante de bloques permitidos por semana
 
     for (int i = 0; i < BLOQUES; i++){
         
@@ -15,12 +20,13 @@ MatrizSala::MatrizSala(){
                 this->matrizHorario[i][j] = (VACIA);
         }       
     }
-    for (int k = 0; k<8; k++){
+    for (int k = 0; k<8; k++){ // Iteración para rellenar el día sábado
         if(k<4){
+            
             this->matrizHorario[k][5] = (VACIA);
-        } else
-        {
-            this->matrizHorario[k][5] = (NOONE);
+        } 
+        else{
+            this->matrizHorario[k][5] = (NOONE); //Marca los días no disponibles
         }
         
     }
@@ -29,43 +35,14 @@ MatrizSala::MatrizSala(){
 MatrizSala::~MatrizSala(){
 }
 
-/*MatrizSala::MatrizSala(DocenteCurso Docente){
-
-    for (int i = 0; i < BLOQUES; i++){
-        
-        for (int j = 0; j < DIAS; j++){
-
-            this->matrizHorario[i][j] = (VACIA);
-
-        }        
-    }
-    // POR WEAR
-} */
-
-MatrizSala::MatrizSala(std::string id, int matriz[BLOQUES][DIAS]){
-    
-    try {
-        this->idSala = id;
-        MatrizSala();
-        for (int i = 0; i < BLOQUES; i++)
-        {
-            for (int j = 0; j < DIAS; j++)
-            {
-                //Llenado... por definir
-            }
-            
-        }
-
-    } catch (...){
-        MatrizSala();
-    }
-
-}
 
 void MatrizSala::setIdSala(string id){
     this->idSala=id;
 }
 
+string MatrizSala::getIdSala(){
+    return this->idSala;
+}
 int MatrizSala::getBloquesPorDia(int dia){
     int disponibles=0;
     try{
@@ -73,15 +50,14 @@ int MatrizSala::getBloquesPorDia(int dia){
             int i;
             for (i = 0; i < BLOQUES; i++)
             {
-                if(this->matrizHorario[i][dia].compare(VACIA)==0){
+                if(this->matrizHorario[i][dia]==(VACIA)){
                    disponibles++; 
                 }
             }
-            
         }
 
     }catch (...){
-        disponibles = 0;
+        return disponibles;
     }
     return disponibles;
 }
@@ -91,20 +67,33 @@ int MatrizSala::getBloquesDisponibles(){
 }
 
 void MatrizSala::mostrarMatriz(){
+    cout <<endl<<" Mostrando disponibilidad de la sala "<< this->idSala<<endl<<endl;
     cout << "BLQ/DIA  LUNES   MARTES  MIERCOLES  JUEVES  VIERNES   SABADO"<<endl;
-    int dias =0;
     for (int i = 0; i < BLOQUES; i++)
     {
         cout<<"BLOQUE "<<i+1<<" ";
         for (int j = 0; j < DIAS; j++)
         {
             cout <<this->matrizHorario[i][j]<<"    ";
-            dias++;
         }
          cout << endl;
     }
-    cout<<endl<<this->bloquesDisponibles<<" Bloques disponibles"<<dias<<endl;
+    cout<<endl<<this->bloquesDisponibles<<" Bloques disponibles"<<endl<<endl;
 }
 
+void MatrizSala::insertarBloque(int bloque, int dia, char* profeRamo){
 
+   if(dia<6 && bloque<7){                               // Primera validación
+       if(dia==5 && bloque>=4){                         // Validación para el Sábado
+
+       } else{
+            this->matrizHorario[bloque][dia]=(profeRamo);
+            this->bloquesDisponibles = this->bloquesDisponibles - 1;
+       }
+   }
+}
+
+char* MatrizSala::getBloque(int row, int col){
+    return this->matrizHorario[row][col];
+} 
 
