@@ -67,7 +67,6 @@ vector<DocenteCurso> llenarVectorDocenteCurso(){
     return vectorDocenteCurso;
 }
 
-<<<<<<< HEAD
 vector<DisponibilidadHoraria> llenarVectorDisponibilidadHoraria(){
     vector<DisponibilidadHoraria> vectorDisponibilidadHoraria;
     DisponibilidadHoraria *disponibilidadHorariaAuxiliar = NULL;
@@ -233,30 +232,48 @@ void mostrarMatrizDisponibilidad(vector<vector<bool>> vectorDisponibilidadHorari
         cout << endl;
     }
 }
-=======
 
-void escribirExcel(vector<MatrizSala> vectorMatricesConSalas, vector<string> dias){
+vector<MatrizSala> crearVectorConSalasVacias(vector<string> vectorSalas){
+
+    vector<MatrizSala> vectorConSalas;
+    for(int i = 0; i < vectorSalas.size(); i++){
+        MatrizSala *salaIndividual = new MatrizSala(vectorSalas[i]);
+        vectorConSalas.push_back(*salaIndividual);
+    }
+
+    return vectorConSalas;
+
+}
+
+
+void escribirExcel(vector<MatrizSala> vectorMatricesConSalas){
       /*
       * Función que crea el Excel de Salida y sus hojas.
       * 
-      * @param archivoExcel, puntero a Salida.xlsx (vacio)
       * @param vectorMatricesConSalas, el vector que contiene todas las salas rellenadas.
-      * @param dias, vector con los días de la semana "lunes", "martes"... 
+      * 
+      * Recorre el arreglo, por cada sala se crea una hoja nueva y se escriben los
+      * datos de la matrizSala en cada celda
       * 
       *  */
+      vector<string> vectorDias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
+
       lxw_workbook  *archivoExcel  = workbook_new("Horario.xlsx");
       for(int x = 0; x < vectorMatricesConSalas.size(); x++){
 
-            MatrizSala *salaIndividual = &vectorMatricesConSalas[x]; //Capturamos una Sala
+            //Capturamos una Sala
+            MatrizSala *salaIndividual = &vectorMatricesConSalas[x]; 
 
-            lxw_worksheet *worksheet = workbook_add_worksheet(
-                                        archivoExcel, 
-                                        salaIndividual->getIdSala().c_str());
+            //Hoja Nueva para la Sala captura
+            lxw_worksheet *worksheet = workbook_add_worksheet(archivoExcel, salaIndividual->getIdSala().c_str());
 
+            // Iteración por filas "bloques"
             for (int i = 0; i < BLOQUES; i++)
             {
-                worksheet_write_string(worksheet,0,i+1,dias[i].c_str(), NULL);
+                worksheet_write_string(worksheet,0,i+1,vectorDias[i].c_str(), NULL);
                 //worksheet_write_string(worksheet,i+1,0,strcat("BLOQUE ", "0" +i+1), NULL);
+
+                // Iteración por columnas "Dias"
                 for (int j = 0; j < DIAS; j++)
                 {
                     /*
@@ -267,6 +284,8 @@ void escribirExcel(vector<MatrizSala> vectorMatricesConSalas, vector<string> dia
             } 
         } 
         workbook_close(archivoExcel);
+
+        //Fin
 }
 
 vector<std::string> llenarArregloSalas(const char* nombreArchivoSalas){
@@ -281,7 +300,8 @@ vector<std::string> llenarArregloSalas(const char* nombreArchivoSalas){
         else{
         char* celda;
         xlsxioreadersheet hoja;
-        hoja = xlsxioread_sheet_open(archivoSalas, "NombreSalas", XLSXIOREAD_SKIP_EMPTY_ROWS);
+        hoja = xlsxioread_sheet_open(archivoSalas, NULL, XLSXIOREAD_SKIP_EMPTY_ROWS);
+        
         int numColumna;
         int numFila = 1;
         
@@ -292,7 +312,6 @@ vector<std::string> llenarArregloSalas(const char* nombreArchivoSalas){
                     if(numColumna == 1){
                         nombreSala = string(celda);
                     }
-
                     if(numColumna == 2){
                         nombreSala += "-" + string(celda);
                     }
@@ -317,4 +336,3 @@ void mostrarArregloSalas(vector<string> vectorSalas){
         cout<< vectorSalas[i]<<endl;
     }
 }
->>>>>>> Pipe---ClaseMatrizSala
