@@ -17,3 +17,14 @@ void DocenteCurso::mostrarDatos(){
     cout << "Id docente: " << this->id_docente << endl;
     cout << "Bloques disponiles: " << this->bloques_disponibles << endl;
 }
+
+int DocenteCurso::getIdProfe(){
+    return this->id_docente;
+}
+
+int DocenteCurso::getBloquesTotalesRamo(){
+    return this->bloques_disponibles;
+}
+std::string DocenteCurso::getCodigoCurso(){
+    return this->codigo_curso;
+}

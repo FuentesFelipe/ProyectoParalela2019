@@ -18,7 +18,6 @@ class MatrizSala {
     private:
         
         std::string idSala;
-        bool full;
         char* matrizHorario[BLOQUES][DIAS];
         int bloquesDisponibles;       
     
@@ -29,18 +28,19 @@ class MatrizSala {
     
     virtual ~MatrizSala();
 
-    void setIdSala(string id);
+    void setIdSala(string);
     string getIdSala();
     
     int getBloquesDisponibles();
     void mostrarMatriz();
-    void insertarBloque(int bloque, int dia, char* profeRamo);
+    void insertarBloque(int , int , char* );
     
     //Ingresa un día de forma entera (0 = lunes, 1 = martes...)
     // Retorna la cantidad de bloques disponibles en ese día
-    int getBloquesPorDia(int dia);
+    int getBloquesDisponiblesPorDia(int);
+    char* getBloque(int, int); 
 
-    char* getBloque(int row, int col); 
+    bool consultarDispDia(int,int);
     
     
 };

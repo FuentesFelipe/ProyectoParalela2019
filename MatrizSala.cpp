@@ -9,7 +9,6 @@ MatrizSala::MatrizSala(std::string edificioSala){
     *   y llena su matriz de disponibilidad con vacios "EMPTY"
     *   
     *  */
-    this->full = false;
     this->idSala = edificioSala;
     this->bloquesDisponibles = OFERTA; //OFERTA = 39 constante de bloques permitidos por semana
 
@@ -43,7 +42,7 @@ void MatrizSala::setIdSala(string id){
 string MatrizSala::getIdSala(){
     return this->idSala;
 }
-int MatrizSala::getBloquesPorDia(int dia){
+int MatrizSala::getBloquesDisponiblesPorDia(int dia){
     int disponibles=0;
     try{
         if(dia<6){
@@ -96,4 +95,14 @@ void MatrizSala::insertarBloque(int bloque, int dia, char* profeRamo){
 char* MatrizSala::getBloque(int row, int col){
     return this->matrizHorario[row][col];
 } 
+
+bool MatrizSala::consultarDispDia(int row,int col){
+    if(this->matrizHorario[row][col]==VACIA){
+        return true;
+    } else{
+        return false;
+    }
+}
+
+
 

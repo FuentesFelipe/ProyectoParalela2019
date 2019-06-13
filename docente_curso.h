@@ -11,5 +11,8 @@ class DocenteCurso{
         DocenteCurso(std::string, int, int);
         ~DocenteCurso();
         void mostrarDatos();
+        int getIdProfe();
+        int getBloquesTotalesRamo();
+        std::string getCodigoCurso();
 
 };
