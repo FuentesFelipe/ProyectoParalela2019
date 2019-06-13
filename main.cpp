@@ -10,10 +10,17 @@
 using namespace std;
 
 int main(){
-    vector<DisponibilidadHoraria> vectorPrueba = llenarVectorDisponibilidadHoraria();
+    vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria();
+    vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
 
-    for(int i = 0; i < vectorPrueba.size(); i++)
-        vectorPrueba[i].mostrarDatos();
+    for(int i = 0; i < 10; i++){
+        vectorDisponibilidad[i].mostrarDatos();
+        cout << endl;
+        vectorDocenteCurso[i].mostrarDatos();
+        cout << endl;
+
+    }
+        
     
     
 

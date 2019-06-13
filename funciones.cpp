@@ -57,6 +57,7 @@ vector<DocenteCurso> llenarVectorDocenteCurso(){
                 if(numFila != 1){
                     DocenteCurso *docenteCursoAuxiliar = new DocenteCurso(codigo_curso_auxiliar, id_docente_auxiliar, bloques_disponibles_auxiliar);
                     vectorDocenteCurso.push_back(*docenteCursoAuxiliar);
+                    delete(docenteCursoAuxiliar);
                     docenteCursoAuxiliar = NULL;
                 }            
                 numFila++;
@@ -108,6 +109,9 @@ vector<DisponibilidadHoraria> llenarVectorDisponibilidadHoraria(){
         
         vectorDisponibilidadHoraria.push_back(*disponibilidadHorariaAuxiliar);
 
+        delete(disponibilidadHorariaAuxiliar);
+        delete(matrizDisponibilidadAuxiliar);
+
         disponibilidadHorariaAuxiliar = NULL;
         matrizDisponibilidadAuxiliar = NULL;
     }    
@@ -154,7 +158,7 @@ vector<vector<bool>> retornaMatrizPorHoja(int dia){
                         {
                             vectorDisponibilidad->push_back(0);
                         }   
-                        
+                        free(celda);
                     }    
                     numColumna++;
                 }
@@ -213,14 +217,6 @@ vector<int> retornaVectorIdDocente(){
             xlsxioread_sheet_close(hojaArchivoDocentes);
 
     return vectorIdDocente;
-}
-
-bool retornaBooleano(string disponibilidad){
-    bool valorDisponibilidad = false;
-    if(disponibilidad == "DISPONIBLE")
-        valorDisponibilidad = true;
-
-    return valorDisponibilidad;
 }
 
 void mostrarMatrizDisponibilidad(vector<vector<bool>> vectorDisponibilidadHoraria){
