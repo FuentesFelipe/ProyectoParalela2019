@@ -4,13 +4,13 @@
 
 using namespace std;
 
-class HorarioSalas{
+class HorarioSala{
     private:
         string nombre_sala;
         vector<vector<string>> matriz_horario;
     
     public:
-        HorarioSalas(string, vector<vector<string>>);
-        ~HorarioSalas();
+        HorarioSala(string, vector<vector<string>>);
+        ~HorarioSala();
         void mostrarDatos();
 };

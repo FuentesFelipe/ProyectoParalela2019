@@ -6,13 +6,20 @@
 #include "funciones.h"
 #include "DocenteCurso.h"
 #include "DisponibilidadHoraria.h"
-#include "HorarioSalas.h"
+#include "HorarioSala.h"
 
 using namespace std;
 
 int main(){
     vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria();
-    vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
+    // vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
+
+    // for(int i = 0; i < vectorDisponibilidad.size(); i++)
+    //     vectorDisponibilidad[i].mostrarDatos();
+
+    // for(int i = 0; i < vectorDocenteCurso.size(); i++)
+    //     vectorDocenteCurso[i].mostrarDatos();
+
 
     vector<vector<string>> matrizSala;
     vector<string> stringPrueba;
@@ -23,7 +30,7 @@ int main(){
         matrizSala.push_back(stringPrueba);
 
 
-    HorarioSalas sala("M1-301", matrizSala);
+    HorarioSala sala("M1-301", matrizSala);
 
     sala.mostrarDatos();
     
