@@ -227,3 +227,12 @@ void mostrarMatrizDisponibilidad(vector<vector<bool>> vectorDisponibilidadHorari
         cout << endl;
     }
 }
+
+void mostrarMatrizHorario(vector<vector<string>> vectorHorarioSala){
+    for(int i = 0; i < vectorHorarioSala.size(); i++){
+        for(int j = 0; j < vectorHorarioSala[i].size(); j++){
+            cout << vectorHorarioSala[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}

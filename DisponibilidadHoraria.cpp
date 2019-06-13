@@ -1,4 +1,4 @@
-#include "disponibilidad_horaria.h"
+#include "DisponibilidadHoraria.h"
 #include "funciones.h"
 #include <iostream>
 

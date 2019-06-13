@@ -1,4 +1,4 @@
-#include "docente_curso.h"
+#include "DocenteCurso.h"
 #include <iostream>
 
 using namespace std;
