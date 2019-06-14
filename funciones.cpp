@@ -5,6 +5,25 @@
 
 using namespace std;
 
+void mostrarMatrizDisponibilidad(vector<vector<bool>> vectorDisponibilidadHoraria){
+    for(int i = 0; i < vectorDisponibilidadHoraria.size(); i++){
+        for(int j = 0; j < vectorDisponibilidadHoraria[i].size(); j++){
+            cout << vectorDisponibilidadHoraria[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
+
+void mostrarMatrizHorario(vector<vector<string>> vectorHorarioSala){
+    for(int i = 0; i < vectorHorarioSala.size(); i++){
+        for(int j = 0; j < vectorHorarioSala[i].size(); j++){
+            cout << vectorHorarioSala[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
+
+
 vector<DocenteCurso> llenarVectorDocenteCurso(){
     vector<DocenteCurso> vectorDocenteCurso; //Vector a ser llenado con los registros del archivo Cursos
     DocenteCurso *docenteCursoAuxiliar = NULL; //Puntero que se utilizará como auxiliar para llenar vectorDocenteCurso;
@@ -67,58 +86,6 @@ vector<DocenteCurso> llenarVectorDocenteCurso(){
     return vectorDocenteCurso;
 }
 
-vector<DisponibilidadHoraria> llenarVectorDisponibilidadHoraria(){
-    vector<DisponibilidadHoraria> vectorDisponibilidadHoraria;
-    DisponibilidadHoraria *disponibilidadHorariaAuxiliar = NULL;
-    
-    //Vectores con datos 
-    vector<int> vectorIdDocentes = retornaVectorIdDocente();
-    vector<vector<vector<bool>>> vectorMatricesPorDia;
-    
-    for(int i = 0; i < 6; i++)
-        vectorMatricesPorDia.push_back(retornaMatrizPorHoja(i));
-    
-    
-    int id_docente_auxiliar;
-    
-    //Vectores auxiliares para ser llenados y almacenados
-    vector<vector<bool>> *matrizDisponibilidadAuxiliar = NULL; 
-    vector<bool> *vectorDisponibilidadAuxiliar = NULL;
-
-    //Este for recorre una vez por cada docente
-    for(int i = 0; i < vectorIdDocentes.size(); i++){
-        id_docente_auxiliar = vectorIdDocentes[i];
-
-        matrizDisponibilidadAuxiliar = new vector<vector<bool>>(); //Matriz disp cada docente       
-
-        //Este for recorre los días de la semana
-        for(int j = 0; j < 6; j++){
-
-            vectorDisponibilidadAuxiliar = new vector<bool>();
-            
-            //Este for recorre la disponibilidad de cada día 
-            for(int k = 0; k < vectorMatricesPorDia[j][i].size(); k++){
-                vectorDisponibilidadAuxiliar->push_back(vectorMatricesPorDia[j][i][k]); 
-            }
-
-            matrizDisponibilidadAuxiliar->push_back(*vectorDisponibilidadAuxiliar);
-             
-            vectorDisponibilidadAuxiliar = NULL;          
-        }  
-        disponibilidadHorariaAuxiliar = new DisponibilidadHoraria(id_docente_auxiliar, *matrizDisponibilidadAuxiliar);
-        
-        vectorDisponibilidadHoraria.push_back(*disponibilidadHorariaAuxiliar);
-
-        delete(disponibilidadHorariaAuxiliar);
-        delete(matrizDisponibilidadAuxiliar);
-
-        disponibilidadHorariaAuxiliar = NULL;
-        matrizDisponibilidadAuxiliar = NULL;
-    }    
-    
-    return vectorDisponibilidadHoraria;
-}
-
 vector<vector<bool>> retornaMatrizPorHoja(int dia){
     vector<string> vectorDias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
     
@@ -165,6 +132,7 @@ vector<vector<bool>> retornaMatrizPorHoja(int dia){
 
                 if(numFila > 1){
                     matrizDisponibilidad.push_back(*vectorDisponibilidad);
+                    delete(vectorDisponibilidad);
                     vectorDisponibilidad = NULL; 
                 }
                    
@@ -219,11 +187,179 @@ vector<int> retornaVectorIdDocente(){
     return vectorIdDocente;
 }
 
-void mostrarMatrizDisponibilidad(vector<vector<bool>> vectorDisponibilidadHoraria){
-    for(int i = 0; i < vectorDisponibilidadHoraria.size(); i++){
-        for(int j = 0; j < vectorDisponibilidadHoraria[i].size(); j++){
-            cout << vectorDisponibilidadHoraria[i][j] << "\t";
+vector<vector<bool>> cambiarColumnasPorFilas(vector<vector<bool>> &matrizATransformar){
+    vector<bool> *punteroColumna = NULL;
+    vector<vector<bool>> matrizTransformada;
+
+    int columna = 0;
+    int fila = 0;
+
+    while(columna < 7){
+        punteroColumna = new vector<bool>();
+        fila = 0;
+
+        if(columna < 4){
+            while(fila < 6){
+                punteroColumna->push_back(matrizATransformar[fila][columna]);
+                fila++;
+            }
         }
-        cout << endl;
+
+        else if(4 <= columna){
+            while(fila < 5){
+                punteroColumna->push_back(matrizATransformar[fila][columna]);
+                fila++;
+            }
+        }
+
+        matrizTransformada.push_back(*punteroColumna);
+        delete(punteroColumna);
+        punteroColumna = NULL;
+
+        columna++;
     }
+
+    matrizATransformar = matrizTransformada;
+
+    return matrizATransformar;    
+
 }
+
+
+vector<DisponibilidadHoraria> llenarVectorDisponibilidadHoraria(){
+    vector<DisponibilidadHoraria> vectorDisponibilidadHoraria;
+    DisponibilidadHoraria *disponibilidadHorariaAuxiliar = NULL;
+    
+    //Vectores con datos 
+    vector<int> vectorIdDocentes = retornaVectorIdDocente();
+    vector<vector<vector<bool>>> vectorMatricesPorDia;
+    
+    for(int i = 0; i < 6; i++)
+        vectorMatricesPorDia.push_back(retornaMatrizPorHoja(i));
+    
+    
+    int id_docente_auxiliar;
+    
+    //Vectores auxiliares para ser llenados y almacenados
+    vector<vector<bool>> *matrizDisponibilidadAuxiliar = NULL; 
+    vector<bool> *vectorDisponibilidadAuxiliar = NULL;
+    
+
+    //Este for recorre una vez por cada docente
+    for(int i = 0; i < vectorIdDocentes.size(); i++){
+        id_docente_auxiliar = vectorIdDocentes[i];
+
+        matrizDisponibilidadAuxiliar = new vector<vector<bool>>(); //Matriz disp cada docente       
+
+        //Este for recorre los días de la semana
+        for(int j = 0; j < 6; j++){
+
+            vectorDisponibilidadAuxiliar = new vector<bool>();
+            
+            //Este for recorre la disponibilidad de cada día 
+            for(int k = 0; k < vectorMatricesPorDia[j][i].size(); k++){
+                vectorDisponibilidadAuxiliar->push_back(vectorMatricesPorDia[j][i][k]); 
+            }
+
+            matrizDisponibilidadAuxiliar->push_back(*vectorDisponibilidadAuxiliar);
+             
+            vectorDisponibilidadAuxiliar = NULL;          
+        }  
+        *matrizDisponibilidadAuxiliar = cambiarColumnasPorFilas(*matrizDisponibilidadAuxiliar); 
+        disponibilidadHorariaAuxiliar = new DisponibilidadHoraria(id_docente_auxiliar, *matrizDisponibilidadAuxiliar);
+        
+        vectorDisponibilidadHoraria.push_back(*disponibilidadHorariaAuxiliar);
+
+        delete(disponibilidadHorariaAuxiliar);
+        delete(matrizDisponibilidadAuxiliar);
+
+        disponibilidadHorariaAuxiliar = NULL;
+        matrizDisponibilidadAuxiliar = NULL;
+    }    
+    
+    return vectorDisponibilidadHoraria;
+}
+
+vector<vector<string>> llenarMatrizHorarioDisponible(){
+    int columna = 0;
+    int fila = 0;
+
+    vector<string> *punteroColumna = NULL;
+    vector<vector<string>> Matriz;
+
+    while(columna < 7){
+        punteroColumna = new vector<string>();
+        fila = 0;
+
+        if(columna < 4){
+            while(fila < 6){
+                punteroColumna->push_back("Disponible");
+                fila++;
+            }
+        }
+
+        else if(4 <= columna){
+            while(fila < 5){
+                punteroColumna->push_back("Disponible");
+                fila++;
+            }
+        }
+        
+        Matriz.push_back(*punteroColumna);
+        delete(punteroColumna);
+        punteroColumna = NULL;
+
+        columna++;
+    }
+
+    return Matriz;
+}
+
+
+vector<HorarioSala> llenarVectorHorarioSala(){
+    vector<HorarioSala> vectorHorarioSala;
+    HorarioSala *punteroHorarioSalaAuxiliar;
+    
+    string nombreSalaAuxiliar;
+
+    xlsxioreader archivoSalas;
+    archivoSalas = xlsxioread_open("Salas.xlsx");
+
+    char* celda;
+    xlsxioreadersheet hoja;
+    hoja = xlsxioread_sheet_open(archivoSalas, "Sheet1", XLSXIOREAD_SKIP_EMPTY_ROWS);
+    int numColumna;
+    int numFila = 1;
+    
+    while (xlsxioread_sheet_next_row(hoja)){
+        numColumna = 1;            
+        while ((celda = xlsxioread_sheet_next_cell(hoja)) != NULL){
+            if(numFila != 1){
+                if(numColumna == 1){
+                    nombreSalaAuxiliar = string(celda);
+                }
+
+                if(numColumna == 2){
+                    nombreSalaAuxiliar += "-" + string(celda);
+                }
+                numColumna++;
+            }
+            free(celda);
+        }
+
+        if(numFila != 1){
+            punteroHorarioSalaAuxiliar = new HorarioSala(nombreSalaAuxiliar, llenarMatrizHorarioDisponible());
+            vectorHorarioSala.push_back(*punteroHorarioSalaAuxiliar);
+            delete(punteroHorarioSalaAuxiliar);
+            punteroHorarioSalaAuxiliar = NULL;
+        }
+        numFila++;
+    }
+    xlsxioread_sheet_close(hoja);
+    xlsxioread_close(archivoSalas);  
+
+    return vectorHorarioSala;
+
+}
+
+
