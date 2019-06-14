@@ -14,6 +14,9 @@ vector<DocenteCurso> llenarVectorDocenteCurso();
 
 vector<vector<bool>> retornaMatrizPorHoja(int);
 vector<int> retornaVectorIdDocente();
+vector<vector<bool>> cambiarColumnasPorFilas(vector<vector<bool>>&);
 vector<DisponibilidadHoraria> llenarVectorDisponibilidadHoraria();
 
+vector<vector<string>> llenarMatrizHorarioDisponible();
 vector<HorarioSala> llenarVectorHorarioSala();
+

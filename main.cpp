@@ -11,29 +11,25 @@
 using namespace std;
 
 int main(){
+    vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
     vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria();
-    // vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
+    vector<HorarioSala> vectorHorarioSala = llenarVectorHorarioSala();
 
-    // for(int i = 0; i < vectorDisponibilidad.size(); i++)
-    //     vectorDisponibilidad[i].mostrarDatos();
+    for(int i = 0; i < vectorDocenteCurso.size(); i++){
+        vectorDocenteCurso[i].mostrarDatos();
+        cout << endl;
+    }
 
-    // for(int i = 0; i < vectorDocenteCurso.size(); i++)
-    //     vectorDocenteCurso[i].mostrarDatos();
-
-
-    vector<vector<string>> matrizSala;
-    vector<string> stringPrueba;
-    
-    for(int i = 0; i < 3; i++)
-        stringPrueba.push_back("Disponible");
-    for(int i = 0; i < 3; i++)
-        matrizSala.push_back(stringPrueba);
+    for(int i = 0; i < vectorDisponibilidad.size(); i++){
+        vectorDisponibilidad[i].mostrarDatos();
+        cout << endl;
+    }
 
 
-    HorarioSala sala("M1-301", matrizSala);
-
-    sala.mostrarDatos();
-    
+    for(int i = 0; i < vectorHorarioSala.size(); i++){
+        vectorHorarioSala[i].mostrarDatos();
+        cout << endl;
+    }    
 
     return 0;
 }
