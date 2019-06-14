@@ -12,5 +12,6 @@ class DocenteCurso{
         ~DocenteCurso();
         void mostrarDatos();
         bool esINF();
+        int retornaBloquesDisponibles();
 
 };

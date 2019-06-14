@@ -30,3 +30,7 @@ bool DocenteCurso::esINF(){
 
     return esINF;
 }
+
+int DocenteCurso::retornaBloquesDisponibles(){
+    return this->bloques_disponibles; 
+}
