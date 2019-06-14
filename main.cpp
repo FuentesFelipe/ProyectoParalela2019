@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <xlsxio_read.h>
+#include <mpi.h>
 
 #include "funciones.h"
 #include "DocenteCurso.h"
