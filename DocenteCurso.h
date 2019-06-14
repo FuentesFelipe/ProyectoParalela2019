@@ -11,5 +11,6 @@ class DocenteCurso{
         DocenteCurso(std::string, int, int);
         ~DocenteCurso();
         void mostrarDatos();
+        bool esINF();
 
 };

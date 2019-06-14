@@ -17,3 +17,16 @@ void DocenteCurso::mostrarDatos(){
     cout << "Id docente: " << this->id_docente << endl;
     cout << "Bloques disponiles: " << this->bloques_disponibles << endl;
 }
+
+bool DocenteCurso::esINF(){
+    string primerosTresChar = "";
+    bool esINF = false;
+    for(int i = 0; i < 3; i++){
+        primerosTresChar += this->codigo_curso[i];
+    }
+
+    if(primerosTresChar == "INF")
+        esINF = true;
+
+    return esINF;
+}

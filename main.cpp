@@ -13,24 +13,37 @@ using namespace std;
 
 int main(){
     vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
-    vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria();
-    vector<HorarioSala> vectorHorarioSala = llenarVectorHorarioSala();
+    // vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria();
+    // vector<HorarioSala> vectorHorarioSala = llenarVectorHorarioSala();
 
-    for(int i = 0; i < vectorDocenteCurso.size(); i++){
-        vectorDocenteCurso[i].mostrarDatos();
-        cout << endl;
+    MPI_Init(NULL, NULL);
+
+    int procesos;
+    int proceso;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &proceso);
+    MPI_Comm_size(MPI_COMM_WORLD, &procesos);
+
+    if(proceso == 0){
+        //Se recorre una vez por cada objeto DocenteCurso
+        for(int i = 0; i < vectorDocenteCurso.size(); i++){
+            if(//Si empieza con INF recorre desde el primer lab hasta el ultimo)
+
+            else if(//Si no empieza con INF recorre desde el primer m hasta el ultimo){
+
+            }
+
+        }
     }
 
-    for(int i = 0; i < vectorDisponibilidad.size(); i++){
-        vectorDisponibilidad[i].mostrarDatos();
-        cout << endl;
+    if(proceso == 1){
+        
     }
 
+    if(proceso == 2){
+        
+    }
 
-    for(int i = 0; i < vectorHorarioSala.size(); i++){
-        vectorHorarioSala[i].mostrarDatos();
-        cout << endl;
-    }    
-
+    MPI_Finalize();
     return 0;
 }
