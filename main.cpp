@@ -27,9 +27,9 @@ int main(){
 
     if(proceso == 0){
         //Se recorre una vez por cada objeto DocenteCurso
-        for(int docente = 0; docente < 1; docente++){
+        for(int docente = 0; docente < vectorDocenteCurso.size(); docente++){
             while(vectorDocenteCurso[docente].retornaBloquesDisponibles() > 0){
-                cout << "Hola Mundo" << endl;
+                cout << "Soy el docente: " << docente << endl;
                 //Se verifica que el DocenteCurso sea de INF
                 if(vectorDocenteCurso[docente].esINF()){
                     int primerLab = 35;
@@ -50,14 +50,19 @@ int main(){
                                         vectorDocenteCurso[docente].restaBloquesDisponibles();
                                         cout << "Ahora me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
                                     }
-                                    break;
-                                    
+                                    break;   
                                 }
                             }
                             //Si es sábado
                             else{
                                 for(int bloque = 0; bloque < 4; bloque++){
-                                    // cout << vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] << "[" << bloque << "][" << dia << "]" << endl;                                
+                                    if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible"){
+                                        cout << "Me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
+                                        cout << "Se añade el bloque" << endl;
+                                        vectorDocenteCurso[docente].restaBloquesDisponibles();
+                                        cout << "Ahora me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
+                                    }
+                                    break;                                  
                                 }
 
                             }
@@ -69,8 +74,44 @@ int main(){
 
                 //Se verifica que el DocenteCurso no sea de INF
                 else{
-                    
+                    int primerSala = 0;
+                    int ultimaSala = 34;
 
+                    
+                    //Se recorren todas las salas por cada DocenteCurso que no es de INF    
+                    for(int sala = primerSala; sala <= ultimaSala; sala++){
+                        
+                        //Se recorren los días de la semana
+                        for(int dia = 0; dia < 6; dia++){
+                            //Si es un día de lunes a viernes
+                            if(dia != 5){
+                                for(int bloque = 0; bloque < 7; bloque++){
+                                    if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible"){
+                                        cout << "Me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
+                                        cout << "Se añade el bloque" << endl;
+                                        vectorDocenteCurso[docente].restaBloquesDisponibles();
+                                        cout << "Ahora me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
+                                    }
+                                    break;   
+                                }
+                            }
+                            //Si es sábado
+                            else{
+                                for(int bloque = 0; bloque < 4; bloque++){
+                                    if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible"){
+                                        cout << "Me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
+                                        cout << "Se añade el bloque" << endl;
+                                        vectorDocenteCurso[docente].restaBloquesDisponibles();
+                                        cout << "Ahora me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
+                                    }
+                                    break;                                  
+                                }
+
+                            }
+                            break;
+                        }
+                        break;
+                    }
                 }
                     
             }
