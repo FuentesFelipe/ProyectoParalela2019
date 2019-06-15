@@ -34,3 +34,8 @@ bool DocenteCurso::esINF(){
 int DocenteCurso::retornaBloquesDisponibles(){
     return this->bloques_disponibles; 
 }
+
+void DocenteCurso::restaBloquesDisponibles(){
+    if(this->bloques_disponibles > 0)
+        this->bloques_disponibles--;
+}

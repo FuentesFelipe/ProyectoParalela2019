@@ -13,5 +13,5 @@ class DocenteCurso{
         void mostrarDatos();
         bool esINF();
         int retornaBloquesDisponibles();
-
+        void restaBloquesDisponibles();
 };
