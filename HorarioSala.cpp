@@ -16,3 +16,7 @@ void HorarioSala::mostrarDatos(){
     cout << "Matriz horario: " << endl;
     mostrarMatrizHorario(this->matriz_horario);
 }
+
+vector<vector<string>> HorarioSala::retornaMatrizHorario(){
+    return this->matriz_horario;
+}
