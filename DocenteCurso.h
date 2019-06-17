@@ -14,4 +14,5 @@ class DocenteCurso{
         bool esINF();
         int retornaBloquesDisponibles();
         void restaBloquesDisponibles();
+        std::string retornaIdentificador();
 };

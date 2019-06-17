@@ -34,7 +34,7 @@ int main(){
             int diaFinal;
 
             while(vectorDocenteCurso[docente].retornaBloquesDisponibles() > 0){
-                cout << "Soy el docente: " << docente+2 << endl;
+                // cout << "Soy el docente: " << docente+2 << endl;
                 int bloquesDisponiblesOriginal = vectorDocenteCurso[docente].retornaBloquesDisponibles();
                 
                 if(vectorDocenteCurso[docente].esINF()){
@@ -50,10 +50,12 @@ int main(){
                             if(dia != 5){
                                 for(int bloque = 0; bloque < 7; bloque++){
                                     if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible"){
-                                        // cout << "Me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
-                                        // cout << "Se añade el bloque" << endl;
-                                        // vectorDocenteCurso[docente].restaBloquesDisponibles();
-                                        // cout << "Ahora me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;            
+                                        string identificadorDocente = vectorDocenteCurso[docente].retornaIdentificador();
+                                        vectorHorarioSala[lab].llenarBloque(identificadorDocente, bloque, dia);
+
+                                        vectorDocenteCurso[docente].restaBloquesDisponibles();
+
+                                        break;                                                  
                                     }                                   
                                 }
                             }
@@ -61,10 +63,13 @@ int main(){
                             else{
                                 for(int bloque = 0; bloque < 4; bloque++){
                                     if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible"){
-                                        // cout << "Me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
-                                        // cout << "Se añade el bloque" << endl;
-                                        // vectorDocenteCurso[docente].restaBloquesDisponibles();
-                                        // cout << "Ahora me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;                                           
+                                        string identificadorDocente = vectorDocenteCurso[docente].retornaIdentificador();
+                                        vectorHorarioSala[lab].llenarBloque(identificadorDocente, bloque, dia);
+
+                                        vectorDocenteCurso[docente].restaBloquesDisponibles();
+
+                                        break;
+                                                                                 
                                     }
                                     bloqueFinal = bloque;                                                                      
                                 }
@@ -96,10 +101,12 @@ int main(){
                             if(dia != 5){
                                 for(int bloque = 0; bloque < 7; bloque++){
                                     if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible"){
-                                        cout << "Me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
-                                        cout << "Se añade el bloque" << endl;
+                                        string identificadorDocente = vectorDocenteCurso[docente].retornaIdentificador();
+                                        vectorHorarioSala[sala].llenarBloque(identificadorDocente, bloque, dia);
+
                                         vectorDocenteCurso[docente].restaBloquesDisponibles();
-                                        cout << "Ahora me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;               
+
+                                        break;                                                       
                                     }                                   
                                 }
                             }
@@ -107,10 +114,13 @@ int main(){
                             else{
                                 for(int bloque = 0; bloque < 4; bloque++){
                                     if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible"){
-                                        cout << "Me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;
-                                        cout << "Se añade el bloque" << endl;
+                                        string identificadorDocente = vectorDocenteCurso[docente].retornaIdentificador();
+                                        vectorHorarioSala[sala].llenarBloque(identificadorDocente, bloque, dia);
+
                                         vectorDocenteCurso[docente].restaBloquesDisponibles();
-                                        cout << "Ahora me quedan " << vectorDocenteCurso[docente].retornaBloquesDisponibles() << endl;                                           
+
+                                        break;
+                                                                                   
                                     }
                                     bloqueFinal = bloque;                                                                      
                                 }
@@ -131,26 +141,28 @@ int main(){
                 //Se realiza la salida del bucle en el caso de que no sea posible seguir llenando el horario con este DocenteCurso
                 if(vectorDocenteCurso[docente].esINF()){
                     if(bloqueFinal == 3 && diaFinal == 5 && labFinal == 40){
-                        cout << "Bloque Final: " << bloqueFinal << endl;
-                        cout << "Dia Final: " << diaFinal << endl;
-                        cout << "Lab Final: " << labFinal << endl;
+                        // cout << "Bloque Final: " << bloqueFinal << endl;
+                        // cout << "Dia Final: " << diaFinal << endl;
+                        // cout << "Lab Final: " << labFinal << endl;
                         break;
                     }
                 }
 
                 else{
                     if(bloqueFinal == 3 && diaFinal == 5 && salaFinal == 34){
-                        cout << "Bloque Final: " << bloqueFinal << endl;
-                        cout << "Dia Final: " << diaFinal << endl;
-                        cout << "Sala Final: " << salaFinal << endl;
+                        // cout << "Bloque Final: " << bloqueFinal << endl;
+                        // cout << "Dia Final: " << diaFinal << endl;
+                        // cout << "Sala Final: " << salaFinal << endl;
                         break;
                     }
                 }
 
                     
             }//Mientras los bloques disponibles sean mayor a 0
-            
+        }
 
+        for(int i = 0; i < vectorHorarioSala.size(); i++){
+            vectorHorarioSala[i].mostrarDatos();
         }
     }
 

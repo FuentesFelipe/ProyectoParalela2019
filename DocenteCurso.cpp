@@ -39,3 +39,8 @@ void DocenteCurso::restaBloquesDisponibles(){
     if(this->bloques_disponibles > 0)
         this->bloques_disponibles--;
 }
+
+string DocenteCurso::retornaIdentificador(){
+    string identificador = this->codigo_curso + "-" + to_string(this->id_docente);
+    return identificador;
+}
