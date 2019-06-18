@@ -33,7 +33,7 @@ class MatrizSala {
     
     int getBloquesDisponibles();
     void mostrarMatriz();
-    void insertarBloque(int , int , char* );
+    void insertarBloque(int , int , string);
     
     //Ingresa un día de forma entera (0 = lunes, 1 = martes...)
     // Retorna la cantidad de bloques disponibles en ese día

@@ -1,4 +1,5 @@
 #include "MatrizSala.h"
+#include "funciones.h"
 #include <iostream>
 
 using namespace std;
@@ -80,13 +81,13 @@ void MatrizSala::mostrarMatriz(){
     cout<<endl<<this->bloquesDisponibles<<" Bloques disponibles"<<endl<<endl;
 }
 
-void MatrizSala::insertarBloque(int bloque, int dia, char* profeRamo){
-
-   if(dia<6 && bloque<7){                               // Primera validación
+void MatrizSala::insertarBloque(int bloque, int dia, string profeRamo){
+    
+   if(dia<DIAS && bloque<BLOQUES){                               // Primera validación
        if(dia==5 && bloque>=4){                         // Validación para el Sábado
 
        } else{
-            this->matrizHorario[bloque][dia]=(profeRamo);
+            this->matrizHorario[bloque][dia]=constToCharArray(profeRamo);
             this->bloquesDisponibles = this->bloquesDisponibles - 1;
        }
    }

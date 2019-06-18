@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <sstream>
 
 class DocenteCurso{
     private:
@@ -13,6 +14,7 @@ class DocenteCurso{
         void mostrarDatos();
         int getIdProfe();
         int getBloquesTotalesRamo();
+        void setBloquesTotalesRamo();
         std::string getCodigoCurso();
 
 };

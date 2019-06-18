@@ -15,8 +15,9 @@ class DisponibilidadHoraria{
         ~DisponibilidadHoraria();
         void mostrarDatos();
         int getIdDocente();
-        bool getDisponibilidad(int,int,bool);
+        bool getDisponibilidad(int,int);
         void setDisponibilidad(int,int,bool);
+        
         vector<vector<bool>> getMatriz();
         int getCantidadBloquesLibres();
 };

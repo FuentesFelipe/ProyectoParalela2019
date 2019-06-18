@@ -1,16 +1,38 @@
 #include "funciones.h"
 #include <iostream>
 #include <string>
-#include <xlsxio_read.h>
 #include "xlsxwriter.h"
+#include "xlsxio_read.h"
+#include <xlsxio_read.h>
+
+
 
 using namespace std;
 
-char * crearNombreConcatenado(string& idCurso, int& idProfe){
+char* obtener_entrada(char** matriz, int largo, char* identificador) {
+    char* archivo = NULL;
+    int i = 0, k = 0;
+
+    if (largo > 0) {
+        for (i = 0; i < largo; i++) {
+            if (strcmp(identificador, matriz[i]) == 0) {
+                k = i + 1;
+                archivo = (char *) calloc(strlen(matriz[k]) + 1, sizeof (char));
+
+                snprintf(archivo, strlen(matriz[k]) + 1, "%s", matriz[k]);
+                break;
+            }
+        }
+    }
+
+    return archivo;
+}
+
+char * constToCharArray(string& elemento){
     
-    char *buf = strcpy(buf,(idCurso+= "-" + idProfe).c_str());
-    return buf;
-    delete []buf;
+    char *salida;
+    salida = strcpy(salida,elemento.c_str());
+    return salida;
 }
 
 vector<DocenteCurso> llenarVectorDocenteCursoNew(const char* nombreArchivo){
@@ -278,14 +300,14 @@ void escribirExcel(vector<MatrizSala> vectorMatricesConSalas, vector<string> vec
       * datos de la matrizSala en cada celda
       * 
       *  */
-
+        const char* bloque;
       lxw_workbook  *archivoExcel  = workbook_new("Horario.xlsx");
       for(int x = 0; x < vectorMatricesConSalas.size(); x++){
 
             //Capturamos una Sala
             MatrizSala *salaIndividual = &vectorMatricesConSalas[x]; 
 
-            //Hoja Nueva para la Sala captura
+            //Hoja Nueva para la Sala capturada
             lxw_worksheet *worksheet = workbook_add_worksheet(archivoExcel, salaIndividual->getIdSala().c_str());
 
             // Iteración por filas "bloques"
@@ -295,7 +317,13 @@ void escribirExcel(vector<MatrizSala> vectorMatricesConSalas, vector<string> vec
                 //worksheet_write_string(worksheet,i+1,0,strcat("BLOQUE ", "0" +i+1), NULL);
                 for (int j = 0; j < DIAS; j++)
                 {   // Inserta el Bloque en el formato IDCURSO-IDPROFE en su celda correspondiente
-                    worksheet_write_string(worksheet,i+1,j+1,salaIndividual->getBloque(i,j), NULL);
+                    bloque = salaIndividual->getBloque(i,j);
+                    cout<< "bloque = "<< bloque<<endl;
+                    string nuevoBloque = bloque;
+                    cout<< "nuevoBloque = "<< nuevoBloque<<endl;
+                    
+                    cout<<"ESCRIBIENDO "<<nuevoBloque<<"EN "<<i<<","<<j<<endl;
+                    worksheet_write_string(worksheet,i+1,j+1,nuevoBloque.c_str(), NULL);
                 } 
             } 
         } 

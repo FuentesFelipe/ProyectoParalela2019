@@ -52,8 +52,8 @@ void DisponibilidadHoraria::setDisponibilidad(int row, int col, bool disponibili
         this->bloquesDisponibles = this->bloquesDisponibles - 1;
 }
 
-bool DisponibilidadHoraria::getDisponibilidad(int row ,int col, bool disponibilidad){
-    return this->matriz_disponibilidad[row][col] = disponibilidad;
+bool DisponibilidadHoraria::getDisponibilidad(int row ,int col){
+    return this->matriz_disponibilidad[row][col];
 }
 
 int DisponibilidadHoraria::getCantidadBloquesLibres(){

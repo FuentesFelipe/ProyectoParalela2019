@@ -8,6 +8,7 @@
 
 using namespace std;
 
+char* obtener_entrada(char**, int, char*);
 vector<DocenteCurso> llenarVectorDocenteCurso();
 vector<DocenteCurso> llenarVectorDocenteCursoNew(const char*);
 
@@ -30,4 +31,4 @@ vector<std::string> llenarArregloSalas(const char* );
 void mostrarArregloSalas(vector<string> );
 
 int bloquesDisponiblesEnMatrizBooleana(vector<vector<bool>>);
-char * crearNombreConcatenado(string&, int&);
+char * constToCharArray(string&);

@@ -4,7 +4,9 @@
 using namespace std;
 
 DocenteCurso::DocenteCurso(string codigo_curso, int id_docente, int bloques_disponibles){
-    this->codigo_curso = codigo_curso;
+    string codigoCurso = codigo_curso + "-";
+    codigoCurso+= static_cast<ostringstream*>( &(ostringstream() << id_docente) )->str();
+    this->codigo_curso = codigoCurso;
     this->id_docente = id_docente;
     this->bloques_disponibles = bloques_disponibles;
 }
@@ -25,6 +27,11 @@ int DocenteCurso::getIdProfe(){
 int DocenteCurso::getBloquesTotalesRamo(){
     return this->bloques_disponibles;
 }
+
+void DocenteCurso::setBloquesTotalesRamo(){
+    this->bloques_disponibles = this->bloques_disponibles -1 ;
+}
+
 std::string DocenteCurso::getCodigoCurso(){
     return this->codigo_curso;
 }
