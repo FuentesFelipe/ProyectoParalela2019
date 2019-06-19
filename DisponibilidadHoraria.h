@@ -12,4 +12,6 @@ class DisponibilidadHoraria{
         DisponibilidadHoraria(int, vector<vector<bool>>);
         ~DisponibilidadHoraria();
         void mostrarDatos();
+        int retornaIdDocente();
+        vector<vector<bool>> retornaMatrizDisponiblidad();
 };

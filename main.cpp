@@ -13,7 +13,7 @@ using namespace std;
 int main(){
 
     vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
-    // vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria();
+    vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria();
     vector<HorarioSala> vectorHorarioSala = llenarVectorHorarioSala();
 
     
@@ -25,6 +25,7 @@ int main(){
         int diaFinal;
 
         string identificadorDocente = vectorDocenteCurso[docente].retornaIdentificador();
+        vector<vector<bool>> matrizDisponibilidadDocente = retornaMatrizPorDocente(vectorDisponibilidad, vectorDocenteCurso[docente].retornaIdDocente());
 
         while(vectorDocenteCurso[docente].retornaBloquesDisponibles() > 0){
             // cout << "Soy el docente: " << docente+2 << endl;
@@ -43,7 +44,7 @@ int main(){
                         //Si es un día de lunes a viernes
                         if(dia != 5){
                             for(int bloque = 0; bloque < 7; bloque++){
-                                if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala[lab].retornaMatrizHorario())){
+                                if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala[lab].retornaMatrizHorario()) && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
                                     
                                     vectorHorarioSala[lab].llenarBloque(identificadorDocente, bloque, dia);
 
@@ -56,7 +57,7 @@ int main(){
                         //Si es sábado
                         else{
                             for(int bloque = 0; bloque < 4; bloque++){
-                                if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala[lab].retornaMatrizHorario())){
+                                if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
                                     vectorHorarioSala[lab].llenarBloque(identificadorDocente, bloque, dia);
 
                                     vectorDocenteCurso[docente].restaBloquesDisponibles();
@@ -93,7 +94,7 @@ int main(){
                         //Si es un día de lunes a viernes
                         if(dia != 5){
                             for(int bloque = 0; bloque < 7; bloque++){
-                                if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala[sala].retornaMatrizHorario())){
+                                if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala[sala].retornaMatrizHorario()) && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
                                     vectorHorarioSala[sala].llenarBloque(identificadorDocente, bloque, dia);
 
                                     vectorDocenteCurso[docente].restaBloquesDisponibles();
@@ -105,7 +106,7 @@ int main(){
                         //Si es sábado
                         else{
                             for(int bloque = 0; bloque < 4; bloque++){
-                                if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible"){
+                                if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
                                     vectorHorarioSala[sala].llenarBloque(identificadorDocente, bloque, dia);
 
                                     vectorDocenteCurso[docente].restaBloquesDisponibles();
@@ -143,8 +144,7 @@ int main(){
             }
 
                 
-        }//Mientras los bloques disponibles sean mayor a 0
-    
+        }//Mientras los bloques disponibles sean mayor a 0    
     }
     
     for(int i = 0; i < vectorHorarioSala.size(); i++){

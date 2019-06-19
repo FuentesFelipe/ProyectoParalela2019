@@ -15,4 +15,5 @@ class DocenteCurso{
         int retornaBloquesDisponibles();
         void restaBloquesDisponibles();
         std::string retornaIdentificador();
+        int retornaIdDocente();
 };

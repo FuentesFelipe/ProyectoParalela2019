@@ -16,3 +16,11 @@ void DisponibilidadHoraria::mostrarDatos(){
     cout << "Matriz disponibilidad: " << endl;
     mostrarMatrizDisponibilidad(this->matriz_disponibilidad);
 }
+
+int DisponibilidadHoraria::retornaIdDocente(){
+    return this->id_docente;
+}
+
+vector<vector<bool>> DisponibilidadHoraria::retornaMatrizDisponiblidad(){
+    return this->matriz_disponibilidad;
+}

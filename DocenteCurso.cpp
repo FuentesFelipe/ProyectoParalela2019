@@ -44,3 +44,7 @@ string DocenteCurso::retornaIdentificador(){
     string identificador = this->codigo_curso + "-" + to_string(this->id_docente);
     return identificador;
 }
+
+int DocenteCurso::retornaIdDocente(){
+    return this->id_docente;
+}
