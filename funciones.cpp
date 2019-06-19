@@ -362,4 +362,27 @@ vector<HorarioSala> llenarVectorHorarioSala(){
 
 }
 
+bool hayCuatroBloquesSeguidos(string identificadorDocente, int bloque, int dia, vector<vector<string>> matrizHorario){
+    bool hayCuatroBloques = false;
+    
 
+    if(bloque > 3){
+        int contadorBloques = 0;
+        for(int i = bloque - 4; i < bloque; i++){
+            if(matrizHorario[i][dia] == identificadorDocente){
+                contadorBloques++;
+            }
+        }
+
+        if(contadorBloques == 4)
+            hayCuatroBloques  = true;
+        else
+            hayCuatroBloques  = false;
+    }
+
+
+    
+
+    return hayCuatroBloques;
+    
+}

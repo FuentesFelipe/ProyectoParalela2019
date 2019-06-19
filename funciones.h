@@ -20,3 +20,5 @@ vector<DisponibilidadHoraria> llenarVectorDisponibilidadHoraria();
 vector<vector<string>> llenarMatrizHorarioDisponible();
 vector<HorarioSala> llenarVectorHorarioSala();
 
+bool hayCuatroBloquesSeguidos(string, int, int, vector<vector<string>>);
+
