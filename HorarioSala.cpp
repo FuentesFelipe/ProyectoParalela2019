@@ -27,3 +27,7 @@ void HorarioSala::llenarBloque(string identificadorDocente, int bloque, int dia)
     }
 
 }
+
+string HorarioSala::retornaNombreSala(){
+    return this->nombre_sala;
+}

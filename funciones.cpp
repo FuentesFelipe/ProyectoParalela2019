@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <xlsxio_read.h>
+#include "xlsxwriter.h"
 
 using namespace std;
 
@@ -403,4 +404,42 @@ bool tieneDisponibilidad(int bloque, int dia, vector<vector<bool>> matrizDisponi
         tieneDisponibilidad = false;
 
     return tieneDisponibilidad;
+}
+
+void escribirExcel(vector<HorarioSala> vectorHorarioSala){
+
+    lxw_workbook  *archivoExcel  = workbook_new("horario.xlsx");
+
+    vector<string> primeraFila = {"Bloques/Días", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
+    vector<string> primeraColumna = {"1", "2", "3", "4", "5", "6", "7"};
+
+    for(int i = 0; i < vectorHorarioSala.size(); i++){
+        lxw_worksheet *hoja = workbook_add_worksheet(archivoExcel, vectorHorarioSala[i].retornaNombreSala().c_str());
+        vector<vector<string>> matrizHorario = vectorHorarioSala[i].retornaMatrizHorario();
+
+        for(int i = 0; i < primeraFila.size(); i++)
+            worksheet_write_string(hoja, 0, i, primeraFila[i].c_str(), NULL);
+        
+        for(int j = 0; j < primeraColumna.size(); j++)
+            worksheet_write_string(hoja, j+1, 0, primeraColumna[j].c_str(), NULL);
+
+        for(int dia = 0; dia < 6; dia++){
+            //No es sábado
+            if(dia != 5){
+                for(int bloque = 0; bloque < 7; bloque++){
+                    worksheet_write_string(hoja, bloque + 1, dia + 1, matrizHorario[bloque][dia].c_str(), NULL);
+                }
+            }
+            //Es sábado
+            else{
+                for(int bloque = 0; bloque < 4; bloque++){
+                    worksheet_write_string(hoja, bloque + 1, dia + 1, matrizHorario[bloque][dia].c_str(), NULL);                    
+                }
+            }
+        }   
+    }
+    
+    
+    workbook_close(archivoExcel);
+
 }

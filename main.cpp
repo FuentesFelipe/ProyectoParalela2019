@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <xlsxio_read.h>
+#include "xlsxwriter.h"
 
 #include "funciones.h"
 #include "DocenteCurso.h"
@@ -146,7 +147,8 @@ int main(){
                 
         }//Mientras los bloques disponibles sean mayor a 0    
     }
-    
+
+    escribirExcel(vectorHorarioSala);
     for(int i = 0; i < vectorHorarioSala.size(); i++){
         vectorHorarioSala[i].mostrarDatos();
     }

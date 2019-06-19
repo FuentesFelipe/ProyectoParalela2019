@@ -1,0 +1,2 @@
+g++ main.cpp funciones.cpp HorarioSala.cpp DisponibilidadHoraria.cpp DocenteCurso.cpp -lxlsxio_read -lxlsxwriter -o proyecto
+
