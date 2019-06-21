@@ -9,6 +9,10 @@ HorarioSala::HorarioSala(string nombre_sala, vector<vector<string>> matriz_horar
     this->matriz_horario = matriz_horario;
 }
 
+HorarioSala::HorarioSala(string nombre_sala){
+    this->nombre_sala = nombre_sala;
+}
+
 HorarioSala::~HorarioSala(){}
 
 void HorarioSala::mostrarDatos(){

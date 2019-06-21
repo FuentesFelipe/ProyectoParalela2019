@@ -11,6 +11,7 @@ class HorarioSala{
     
     public:
         HorarioSala(string, vector<vector<string>>);
+        HorarioSala(string);
         ~HorarioSala();
         void mostrarDatos();
         vector<vector<string>> retornaMatrizHorario();

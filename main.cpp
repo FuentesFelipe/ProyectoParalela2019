@@ -8,14 +8,22 @@
 #include "DocenteCurso.h"
 #include "DisponibilidadHoraria.h"
 #include "HorarioSala.h"
+#include <mpi.h>
 
 using namespace std;
 
-int main(){
 
-    vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso();
-    vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria();
-    vector<HorarioSala> vectorHorarioSala = llenarVectorHorarioSala();
+int main(int argc, char *argv[]){
+
+    if(argc>5){
+    // ==============   Capturamos el nombre de los archivos Excel
+    const char* nombreArchivoSalas = obtener_entrada(argv,argc,"-s");                      
+    const char* nombreArchivoDocentes = obtener_entrada(argv,argc,"-d"); 
+    const char* nombreArchivoCursos = obtener_entrada(argv,argc,"-c");
+        
+    vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso(nombreArchivoCursos);
+    vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria(nombreArchivoDocentes);
+    vector<HorarioSala> vectorHorarioSala = llenarVectorHorarioSala(nombreArchivoSalas);
 
     
     //Se recorre una vez por cada objeto DocenteCurso
@@ -153,5 +161,10 @@ int main(){
         vectorHorarioSala[i].mostrarDatos();
     }
     
+    } else{
+        cout << "Argumentos insuficientes o incorrectos" <<endl;
+        cout<< " -d Docentes.xlsx -c Cursos.xlsx -s Salas.xlsx" <<endl;
+        return EXIT_FAILURE;
+    }
     return 0;
 }
