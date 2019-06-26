@@ -15,15 +15,128 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-    if(argc>5){
-    // ==============   Capturamos el nombre de los archivos Excel
+    int proceso = 0;
+    int procesos = 0;
+
+    MPI_Init(NULL, NULL);
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &proceso);
+    MPI_Comm_size(MPI_COMM_WORLD, &procesos);
+
+    // if(argc>5){
+    // // ==============   Capturamos el nombre de los archivos Excel
     const char* nombreArchivoSalas = obtener_entrada(argv,argc,"-s");                      
     const char* nombreArchivoDocentes = obtener_entrada(argv,argc,"-d"); 
     const char* nombreArchivoCursos = obtener_entrada(argv,argc,"-c");
-        
+
+    //Vectores originales sin dividir    
     vector<DocenteCurso> vectorDocenteCurso = llenarVectorDocenteCurso(nombreArchivoCursos);
     vector<DisponibilidadHoraria> vectorDisponibilidad = llenarVectorDisponibilidadHoraria(nombreArchivoDocentes);
     vector<HorarioSala> vectorHorarioSala = llenarVectorHorarioSala(nombreArchivoSalas);
+
+    //Vectores divididos para trabajar en cada proceso
+    vector<DocenteCurso> vectorDocenteCursoINF;
+    vector<DocenteCurso> vectorDocenteCurso1;
+    vector<DocenteCurso> vectorDocenteCurso2;
+    vector<DocenteCurso> vectorDocenteCurso3;
+
+    vector<HorarioSala> vectorHorarioLabs;
+    vector<HorarioSala> vectorHorarioSala1;
+    vector<HorarioSala> vectorHorarioSala2;
+    vector<HorarioSala> vectorHorarioSala3;
+    
+
+
+    int contadorDocentes = 0;
+    for(int docente = 0; docente < vectorDocenteCurso.size(); docente++){
+        if(vectorDocenteCurso[docente].esINF()){
+            vectorDocenteCursoINF.push_back(vectorDocenteCurso[docente]);
+        }
+        
+        else{
+            if(contadorDocentes < 55){
+                vectorDocenteCurso1.push_back(vectorDocenteCurso[docente]);
+                contadorDocentes++;
+            }
+
+            else if(contadorDocentes < 111){
+                vectorDocenteCurso2.push_back(vectorDocenteCurso[docente]);
+                contadorDocentes++;
+            }
+
+            else if(contadorDocentes < 167){
+                vectorDocenteCurso3.push_back(vectorDocenteCurso[docente]);
+                contadorDocentes++;
+            }
+        }
+    }
+
+    
+    int contadorSalas = 0;
+    for(int sala = 0; sala < vectorHorarioSala.size(); sala++){
+        if(vectorHorarioSala[sala].esUnLab()){
+            vectorHorarioLabs.push_back(vectorHorarioSala[sala]);
+        }
+        
+        else{
+            if(contadorSalas < 11){
+                vectorHorarioSala1.push_back(vectorHorarioSala[sala]);
+                contadorSalas++;
+            }
+
+            else if(contadorSalas < 23){
+                vectorHorarioSala2.push_back(vectorHorarioSala[sala]);
+                contadorSalas++;
+            }
+
+            else if(contadorSalas < 35){
+                vectorHorarioSala3.push_back(vectorHorarioSala[sala]);
+                contadorSalas++;
+            }
+        }
+    }
+
+
+    
+    if(proceso == 0){
+        cout << endl;
+        for(int i = 0; i < vectorHorarioSala1.size(); i++){
+            cout << vectorHorarioSala1[i].retornaNombreSala() << endl;
+        }
+        cout << endl;
+        for(int i = 0; i < vectorHorarioSala2.size(); i++){
+            cout << vectorHorarioSala2[i].retornaNombreSala() << endl;
+        }
+        cout << endl;
+        for(int i = 0; i < vectorHorarioSala3.size(); i++){
+            cout << vectorHorarioSala3[i].retornaNombreSala() << endl;
+        }
+        cout << endl;
+        for(int i = 0; i < vectorHorarioLabs.size(); i++){
+            cout << vectorHorarioLabs[i].retornaNombreSala() << endl;
+        }
+    }
+
+    if(proceso == 0){
+        for(int i = 0; i < vectorDocenteCurso1.size(); i++){
+            cout << vectorDocenteCurso1[i].retornaIdentificador() << endl;
+        }
+        cout << endl;
+        for(int i = 0; i < vectorDocenteCurso2.size(); i++){
+            cout << vectorDocenteCurso2[i].retornaIdentificador() << endl;
+        }
+        cout << endl;
+        for(int i = 0; i < vectorDocenteCurso3.size(); i++){
+            cout << vectorDocenteCurso3[i].retornaIdentificador() << endl;
+        }
+        cout << endl;
+        for(int i = 0; i < vectorDocenteCursoINF.size(); i++){
+            cout << vectorDocenteCursoINF[i].retornaIdentificador() << endl;
+        }
+    }
+    
+
+    
 
     
     //Se recorre una vez por cada objeto DocenteCurso
@@ -37,7 +150,6 @@ int main(int argc, char *argv[]){
         vector<vector<bool>> matrizDisponibilidadDocente = retornaMatrizPorDocente(vectorDisponibilidad, vectorDocenteCurso[docente].retornaIdDocente());
 
         while(vectorDocenteCurso[docente].retornaBloquesDisponibles() > 0){
-            // cout << "Soy el docente: " << docente+2 << endl;
             int bloquesDisponiblesOriginal = vectorDocenteCurso[docente].retornaBloquesDisponibles();
             
             
@@ -156,15 +268,17 @@ int main(int argc, char *argv[]){
         }//Mientras los bloques disponibles sean mayor a 0    
     }
 
-    escribirExcel(vectorHorarioSala);
-    for(int i = 0; i < vectorHorarioSala.size(); i++){
-        vectorHorarioSala[i].mostrarDatos();
-    }
+
+    // escribirExcel(vectorHorarioSala);
+
+    // } else{
+    //     cout << "Argumentos insuficientes o incorrectos" <<endl;
+    //     cout<< " -d Docentes.xlsx -c Cursos.xlsx -s Salas.xlsx" <<endl;
+    //     return EXIT_FAILURE;
+    // }
+
     
-    } else{
-        cout << "Argumentos insuficientes o incorrectos" <<endl;
-        cout<< " -d Docentes.xlsx -c Cursos.xlsx -s Salas.xlsx" <<endl;
-        return EXIT_FAILURE;
-    }
+    MPI_Finalize();
+    
     return 0;
 }

@@ -35,3 +35,16 @@ void HorarioSala::llenarBloque(string identificadorDocente, int bloque, int dia)
 string HorarioSala::retornaNombreSala(){
     return this->nombre_sala;
 }
+
+bool HorarioSala::esUnLab(){
+    string primerosTresChar = "";
+    bool esUnLab = false;
+    for(int i = 0; i < 3; i++){
+        primerosTresChar += this->nombre_sala[i];
+    }
+
+if(primerosTresChar == "LAB")
+        esUnLab = true;
+
+    return esUnLab;
+}

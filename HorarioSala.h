@@ -17,4 +17,5 @@ class HorarioSala{
         vector<vector<string>> retornaMatrizHorario();
         void llenarBloque(string, int, int);
         string retornaNombreSala();
+        bool esUnLab();
 };
