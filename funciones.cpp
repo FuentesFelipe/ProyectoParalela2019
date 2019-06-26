@@ -582,9 +582,9 @@ bool tieneDisponibilidad(int bloque, int dia, vector<vector<bool>> matrizDisponi
     return tieneDisponibilidad;
 }
 
-void escribirExcel(vector<HorarioSala> vectorHorarioSala){
+void escribirExcel(vector<HorarioSala> vectorHorarioSala, string nombreArchivo){
 
-    lxw_workbook  *archivoExcel  = workbook_new("horario.xlsx");
+    lxw_workbook  *archivoExcel  = workbook_new(nombreArchivo.c_str());
 
     vector<string> primeraFila = {"Bloques/Días", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
     vector<string> primeraColumna = {"1", "2", "3", "4", "5", "6", "7"};

@@ -15,6 +15,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
+
     int proceso = 0;
     int procesos = 0;
 
@@ -23,7 +24,7 @@ int main(int argc, char *argv[]){
     MPI_Comm_rank(MPI_COMM_WORLD, &proceso);
     MPI_Comm_size(MPI_COMM_WORLD, &procesos);
 
-    // if(argc>5){
+    if(argc>5){
     // // ==============   Capturamos el nombre de los archivos Excel
     const char* nombreArchivoSalas = obtener_entrada(argv,argc,"-s");                      
     const char* nombreArchivoDocentes = obtener_entrada(argv,argc,"-d"); 
@@ -97,117 +98,22 @@ int main(int argc, char *argv[]){
     }
 
 
-    
     if(proceso == 0){
-        cout << endl;
-        for(int i = 0; i < vectorHorarioSala1.size(); i++){
-            cout << vectorHorarioSala1[i].retornaNombreSala() << endl;
-        }
-        cout << endl;
-        for(int i = 0; i < vectorHorarioSala2.size(); i++){
-            cout << vectorHorarioSala2[i].retornaNombreSala() << endl;
-        }
-        cout << endl;
-        for(int i = 0; i < vectorHorarioSala3.size(); i++){
-            cout << vectorHorarioSala3[i].retornaNombreSala() << endl;
-        }
-        cout << endl;
-        for(int i = 0; i < vectorHorarioLabs.size(); i++){
-            cout << vectorHorarioLabs[i].retornaNombreSala() << endl;
-        }
-    }
+        for(int docente = 0; docente < vectorDocenteCurso1.size(); docente++){
+            int salaFinal;
+            int bloqueFinal;
+            int diaFinal;
 
-    if(proceso == 0){
-        for(int i = 0; i < vectorDocenteCurso1.size(); i++){
-            cout << vectorDocenteCurso1[i].retornaIdentificador() << endl;
-        }
-        cout << endl;
-        for(int i = 0; i < vectorDocenteCurso2.size(); i++){
-            cout << vectorDocenteCurso2[i].retornaIdentificador() << endl;
-        }
-        cout << endl;
-        for(int i = 0; i < vectorDocenteCurso3.size(); i++){
-            cout << vectorDocenteCurso3[i].retornaIdentificador() << endl;
-        }
-        cout << endl;
-        for(int i = 0; i < vectorDocenteCursoINF.size(); i++){
-            cout << vectorDocenteCursoINF[i].retornaIdentificador() << endl;
-        }
-    }
-    
+            string identificadorDocente = vectorDocenteCurso1[docente].retornaIdentificador();
+            vector<vector<bool>> matrizDisponibilidadDocente = retornaMatrizPorDocente(vectorDisponibilidad, vectorDocenteCurso1[docente].retornaIdDocente());
 
-    
-
-    
-    //Se recorre una vez por cada objeto DocenteCurso
-    for(int docente = 0; docente < vectorDocenteCurso.size(); docente++){
-        int labFinal;
-        int salaFinal;
-        int bloqueFinal;
-        int diaFinal;
-
-        string identificadorDocente = vectorDocenteCurso[docente].retornaIdentificador();
-        vector<vector<bool>> matrizDisponibilidadDocente = retornaMatrizPorDocente(vectorDisponibilidad, vectorDocenteCurso[docente].retornaIdDocente());
-
-        while(vectorDocenteCurso[docente].retornaBloquesDisponibles() > 0){
-            int bloquesDisponiblesOriginal = vectorDocenteCurso[docente].retornaBloquesDisponibles();
-            
-            
-            if(vectorDocenteCurso[docente].esINF()){
-                int primerLab = 35;
-                int ultimoLab = 40;
+            while(vectorDocenteCurso1[docente].retornaBloquesDisponibles() > 0){
+                int bloquesDisponiblesOriginal = vectorDocenteCurso1[docente].retornaBloquesDisponibles();
                 
-                //Se recorren todos los labs por cada DocenteCurso de INF    
-                for(int lab = primerLab; lab <= ultimoLab; lab++){
-                    
-                    //Se recorren los días de la semana
-                    for(int dia = 0; dia < 6; dia++){
-                        //Si es un día de lunes a viernes
-                        if(dia != 5){
-                            for(int bloque = 0; bloque < 7; bloque++){
-                                if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala[lab].retornaMatrizHorario()) && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
-                                    
-                                    vectorHorarioSala[lab].llenarBloque(identificadorDocente, bloque, dia);
-
-                                    vectorDocenteCurso[docente].restaBloquesDisponibles();
-
-                                    break;                                                  
-                                }                                   
-                            }
-                        }
-                        //Si es sábado
-                        else{
-                            for(int bloque = 0; bloque < 4; bloque++){
-                                if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
-                                    vectorHorarioSala[lab].llenarBloque(identificadorDocente, bloque, dia);
-
-                                    vectorDocenteCurso[docente].restaBloquesDisponibles();
-
-                                    break;
-                                                                                
-                                }
-                                bloqueFinal = bloque;                                                                      
-                            }
-
-                        }
-                        if(bloquesDisponiblesOriginal > vectorDocenteCurso[docente].retornaBloquesDisponibles())
-                            break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
-                    
-                        diaFinal = dia;
-                    }
-                    if(bloquesDisponiblesOriginal > vectorDocenteCurso[docente].retornaBloquesDisponibles())
-                            break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
-
-                    labFinal = lab;
-                }
-            }                
-
-            //Se verifica que el DocenteCurso no sea de INF
-            else{
                 int primeraSala = 0;
-                int ultimaSala = 34;
+                int ultimaSala = 10;
                 
-                //Se recorren todos los labs por cada DocenteCurso de INF    
+                //Se recorren todos los labs por cada DocenteCurso   
                 for(int sala = primeraSala; sala <= ultimaSala; sala++){
                     
                     //Se recorren los días de la semana
@@ -215,10 +121,10 @@ int main(int argc, char *argv[]){
                         //Si es un día de lunes a viernes
                         if(dia != 5){
                             for(int bloque = 0; bloque < 7; bloque++){
-                                if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala[sala].retornaMatrizHorario()) && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
-                                    vectorHorarioSala[sala].llenarBloque(identificadorDocente, bloque, dia);
+                                if(vectorHorarioSala1[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala1[sala].retornaMatrizHorario()) && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
+                                    vectorHorarioSala1[sala].llenarBloque(identificadorDocente, bloque, dia);
 
-                                    vectorDocenteCurso[docente].restaBloquesDisponibles();
+                                    vectorDocenteCurso1[docente].restaBloquesDisponibles();
 
                                     break;                                                       
                                 }                                   
@@ -227,10 +133,10 @@ int main(int argc, char *argv[]){
                         //Si es sábado
                         else{
                             for(int bloque = 0; bloque < 4; bloque++){
-                                if(vectorHorarioSala[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
-                                    vectorHorarioSala[sala].llenarBloque(identificadorDocente, bloque, dia);
+                                if(vectorHorarioSala1[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
+                                    vectorHorarioSala1[sala].llenarBloque(identificadorDocente, bloque, dia);
 
-                                    vectorDocenteCurso[docente].restaBloquesDisponibles();
+                                    vectorDocenteCurso1[docente].restaBloquesDisponibles();
 
                                     break;
                                                                                 
@@ -239,46 +145,265 @@ int main(int argc, char *argv[]){
                             }
 
                         }
-                        if(bloquesDisponiblesOriginal > vectorDocenteCurso[docente].retornaBloquesDisponibles())
+                        if(bloquesDisponiblesOriginal > vectorDocenteCurso1[docente].retornaBloquesDisponibles())
                             break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
                     
                         diaFinal = dia;
                     }
-                    if(bloquesDisponiblesOriginal > vectorDocenteCurso[docente].retornaBloquesDisponibles())
+                    if(bloquesDisponiblesOriginal > vectorDocenteCurso1[docente].retornaBloquesDisponibles())
                             break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
 
                     salaFinal = sala;
                 }
-            }
-
-            //Se realiza la salida del bucle en el caso de que no sea posible seguir llenando el horario con este DocenteCurso
-            if(vectorDocenteCurso[docente].esINF()){
-                if(bloqueFinal == 3 && diaFinal == 5 && labFinal == 40){
-                    break;
-                }
-            }
-
-            else{
-                if(bloqueFinal == 3 && diaFinal == 5 && salaFinal == 34){
-                    break;
-                }
-            }
-
                 
-        }//Mientras los bloques disponibles sean mayor a 0    
+
+                //Se realiza la salida del bucle en el caso de que no sea posible seguir llenando el horario con este DocenteCurso
+                
+                if(bloqueFinal == 3 && diaFinal == 5 && salaFinal == 10){
+                    break;
+                }        
+            }//Mientras los bloques disponibles sean mayor a 0    
+        }
+        
     }
 
+  if(proceso == 1){
+        for(int docente = 0; docente < vectorDocenteCurso2.size(); docente++){
+            int salaFinal;
+            int bloqueFinal;
+            int diaFinal;
 
-    // escribirExcel(vectorHorarioSala);
+            string identificadorDocente = vectorDocenteCurso2[docente].retornaIdentificador();
+            vector<vector<bool>> matrizDisponibilidadDocente = retornaMatrizPorDocente(vectorDisponibilidad, vectorDocenteCurso2[docente].retornaIdDocente());
 
-    // } else{
-    //     cout << "Argumentos insuficientes o incorrectos" <<endl;
-    //     cout<< " -d Docentes.xlsx -c Cursos.xlsx -s Salas.xlsx" <<endl;
-    //     return EXIT_FAILURE;
-    // }
+            while(vectorDocenteCurso2[docente].retornaBloquesDisponibles() > 0){
+                int bloquesDisponiblesOriginal = vectorDocenteCurso2[docente].retornaBloquesDisponibles();
+                
+                int primeraSala = 0;
+                int ultimaSala = 11;
+                
+                //Se recorren todos los labs por cada DocenteCurso   
+                for(int sala = primeraSala; sala <= ultimaSala; sala++){
+                    
+                    //Se recorren los días de la semana
+                    for(int dia = 0; dia < 6; dia++){
+                        //Si es un día de lunes a viernes
+                        if(dia != 5){
+                            for(int bloque = 0; bloque < 7; bloque++){
+                                if(vectorHorarioSala2[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala2[sala].retornaMatrizHorario()) && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
+                                    vectorHorarioSala2[sala].llenarBloque(identificadorDocente, bloque, dia);
+
+                                    vectorDocenteCurso2[docente].restaBloquesDisponibles();
+
+                                    break;                                                       
+                                }                                   
+                            }
+                        }
+                        //Si es sábado
+                        else{
+                            for(int bloque = 0; bloque < 4; bloque++){
+                                if(vectorHorarioSala2[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
+                                    vectorHorarioSala2[sala].llenarBloque(identificadorDocente, bloque, dia);
+
+                                    vectorDocenteCurso2[docente].restaBloquesDisponibles();
+
+                                    break;
+                                                                                
+                                }
+                                bloqueFinal = bloque;                                                                      
+                            }
+
+                        }
+                        if(bloquesDisponiblesOriginal > vectorDocenteCurso2[docente].retornaBloquesDisponibles())
+                            break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
+                    
+                        diaFinal = dia;
+                    }
+                    if(bloquesDisponiblesOriginal > vectorDocenteCurso2[docente].retornaBloquesDisponibles())
+                            break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
+
+                    salaFinal = sala;
+                }
+                
+
+                //Se realiza la salida del bucle en el caso de que no sea posible seguir llenando el horario con este DocenteCurso
+                
+                if(bloqueFinal == 3 && diaFinal == 5 && salaFinal == 11){
+                    break;
+                }        
+            }//Mientras los bloques disponibles sean mayor a 0    
+        }
+    }
+
+    if(proceso == 2){
+        for(int docente = 0; docente < vectorDocenteCurso3.size(); docente++){
+            int salaFinal;
+            int bloqueFinal;
+            int diaFinal;
+
+            string identificadorDocente = vectorDocenteCurso3[docente].retornaIdentificador();
+            vector<vector<bool>> matrizDisponibilidadDocente = retornaMatrizPorDocente(vectorDisponibilidad, vectorDocenteCurso3[docente].retornaIdDocente());
+
+            while(vectorDocenteCurso3[docente].retornaBloquesDisponibles() > 0){
+                int bloquesDisponiblesOriginal = vectorDocenteCurso3[docente].retornaBloquesDisponibles();
+                
+                int primeraSala = 0;
+                int ultimaSala = 11;
+                
+                //Se recorren todos los labs por cada DocenteCurso   
+                for(int sala = primeraSala; sala <= ultimaSala; sala++){
+                    
+                    //Se recorren los días de la semana
+                    for(int dia = 0; dia < 6; dia++){
+                        //Si es un día de lunes a viernes
+                        if(dia != 5){
+                            for(int bloque = 0; bloque < 7; bloque++){
+                                if(vectorHorarioSala3[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioSala3[sala].retornaMatrizHorario()) && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
+                                    vectorHorarioSala3[sala].llenarBloque(identificadorDocente, bloque, dia);
+
+                                    vectorDocenteCurso3[docente].restaBloquesDisponibles();
+
+                                    break;                                                       
+                                }                                   
+                            }
+                        }
+                        //Si es sábado
+                        else{
+                            for(int bloque = 0; bloque < 4; bloque++){
+                                if(vectorHorarioSala3[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
+                                    vectorHorarioSala3[sala].llenarBloque(identificadorDocente, bloque, dia);
+
+                                    vectorDocenteCurso3[docente].restaBloquesDisponibles();
+
+                                    break;
+                                                                                
+                                }
+                                bloqueFinal = bloque;                                                                      
+                            }
+
+                        }
+                        if(bloquesDisponiblesOriginal > vectorDocenteCurso3[docente].retornaBloquesDisponibles())
+                            break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
+                    
+                        diaFinal = dia;
+                    }
+                    if(bloquesDisponiblesOriginal > vectorDocenteCurso3[docente].retornaBloquesDisponibles())
+                            break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
+
+                    salaFinal = sala;
+                }
+                
+
+                //Se realiza la salida del bucle en el caso de que no sea posible seguir llenando el horario con este DocenteCurso
+                
+                if(bloqueFinal == 3 && diaFinal == 5 && salaFinal == 11){
+                    break;
+                }        
+            }//Mientras los bloques disponibles sean mayor a 0    
+        }
+    }
+
+    if(proceso == 3){
+        for(int docente = 0; docente < vectorDocenteCursoINF.size(); docente++){
+            int salaFinal;
+            int bloqueFinal;
+            int diaFinal;
+
+            string identificadorDocente = vectorDocenteCursoINF[docente].retornaIdentificador();
+            vector<vector<bool>> matrizDisponibilidadDocente = retornaMatrizPorDocente(vectorDisponibilidad, vectorDocenteCursoINF[docente].retornaIdDocente());
+
+            while(vectorDocenteCursoINF[docente].retornaBloquesDisponibles() > 0){
+                int bloquesDisponiblesOriginal = vectorDocenteCursoINF[docente].retornaBloquesDisponibles();
+                
+                int primeraSala = 0;
+                int ultimaSala = 5;
+                
+                //Se recorren todos los labs por cada DocenteCurso   
+                for(int sala = primeraSala; sala <= ultimaSala; sala++){
+                    
+                    //Se recorren los días de la semana
+                    for(int dia = 0; dia < 6; dia++){
+                        //Si es un día de lunes a viernes
+                        if(dia != 5){
+                            for(int bloque = 0; bloque < 7; bloque++){
+                                if(vectorHorarioLabs[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && !hayCuatroBloquesSeguidos(identificadorDocente, bloque, dia, vectorHorarioLabs[sala].retornaMatrizHorario()) && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
+                                    vectorHorarioLabs[sala].llenarBloque(identificadorDocente, bloque, dia);
+
+                                    vectorDocenteCursoINF[docente].restaBloquesDisponibles();
+
+                                    break;                                                       
+                                }                                   
+                            }
+                        }
+                        //Si es sábado
+                        else{
+                            for(int bloque = 0; bloque < 4; bloque++){
+                                if(vectorHorarioLabs[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
+                                    vectorHorarioLabs[sala].llenarBloque(identificadorDocente, bloque, dia);
+
+                                    vectorDocenteCursoINF[docente].restaBloquesDisponibles();
+
+                                    break;
+                                                                                
+                                }
+                                bloqueFinal = bloque;                                                                      
+                            }
+
+                        }
+                        if(bloquesDisponiblesOriginal > vectorDocenteCursoINF[docente].retornaBloquesDisponibles())
+                            break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
+                    
+                        diaFinal = dia;
+                    }
+                    if(bloquesDisponiblesOriginal > vectorDocenteCursoINF[docente].retornaBloquesDisponibles())
+                            break; //Si ha cambiado la cantidad de bloques disponibles deja de recorrer
+
+                    salaFinal = sala;
+                }
+                
+
+                //Se realiza la salida del bucle en el caso de que no sea posible seguir llenando el horario con este DocenteCurso
+                
+                if(bloqueFinal == 3 && diaFinal == 5 && salaFinal == 5){
+                    break;
+                }        
+            }//Mientras los bloques disponibles sean mayor a 0    
+        }
+    }
+
+     if(proceso == 0){
+         string archivo = "archivo1.xlsx";
+        escribirExcel(vectorHorarioSala1, archivo);
+    }
+
+    if(proceso == 1){
+        string archivo = "archivo2.xlsx";
+        escribirExcel(vectorHorarioSala2, archivo);
+    }
+
+    if(proceso == 2){
+        string archivo = "archivo3.xlsx";
+        escribirExcel(vectorHorarioSala3, archivo);
+    }
+
+    if(proceso == 3){
+        string archivo = "archivoLabs.xlsx";
+        escribirExcel(vectorHorarioLabs, archivo);
+    }
+    
+    
+
+    
+
+    } else{
+        cout << "Argumentos insuficientes o incorrectos" <<endl;
+        cout<< " -d Docentes.xlsx -c Cursos.xlsx -s Salas.xlsx" <<endl;
+        return EXIT_FAILURE;
+    }
 
     
     MPI_Finalize();
     
     return 0;
 }
+
