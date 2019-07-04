@@ -32,7 +32,7 @@ bool hayCuatroBloquesSeguidos(string, int, int, vector<vector<string>>);
 vector<vector<bool>> retornaMatrizPorDocente(vector<DisponibilidadHoraria>, int);
 bool tieneDisponibilidad(int, int, vector<vector<bool>>);
 
-void escribirExcel(vector<HorarioSala>);
+void escribirExcel(vector<HorarioSala>, const char*);
 
 bool retornaBooleano(string);
 vector<HorarioSala> crearVectorConSalasVacias(vector<string>);
