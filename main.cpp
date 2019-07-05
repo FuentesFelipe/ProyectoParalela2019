@@ -3,7 +3,7 @@
 #include <vector>
 #include <xlsxio_read.h>
 #include "xlsxwriter.h"
-
+#include <ctime>
 #include "funciones.h"
 #include "DocenteCurso.h"
 #include "DisponibilidadHoraria.h"
@@ -14,6 +14,10 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
+    unsigned t0, t1;
+
+    t0 = clock();
+    
     if(argc>5){
         
         // ======   Capturamos el nombre de los archivos Excel
@@ -125,7 +129,6 @@ int main(int argc, char *argv[]){
                 int IDdocente;
                 
                 string codigoCurso;                
-                cout<< vectorCursosINF.size()<<" CURSOS INF EN PROCESADOR "<<procesadorID<<endl;
                 for(int curso = 0; curso < vectorCursosINF.size(); curso++){             
 
                 codigoCurso =vectorCursosINF[curso].retornaIdentificador();
@@ -142,11 +145,11 @@ int main(int argc, char *argv[]){
                     for(int lab = primerLAB; lab < ultimoLAB ; lab++){
                         
                         //Se recorren los días de la semana
-                        for(int dia = 0; dia < 6; dia++){
+                        for(int dia = 0; dia < DIAS; dia++){
                     
                             //Si es un día de lunes a viernes
                             if(dia != 5){
-                                for(int bloque = 0; bloque < 7; bloque++){
+                                for(int bloque = 0; bloque < BLOQUES; bloque++){
                                     if(vectorHorarioSala[lab].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
                                         
                                         vectorHorarioSala[lab].llenarBloque(codigoCurso, bloque, dia); //Asignamos bloque en el LAB
@@ -205,9 +208,7 @@ int main(int argc, char *argv[]){
 
             vector<int> vectorParaEnvio;
             MPI_Recv(&rango,sizeof(rango),MPI_INT,0,1,MPI_COMM_WORLD,&stat);
-            
-            cout<<rango[1] - rango[0]<<" CURSOS ("<<(rango[0])<<" al "<< rango[1]<<") EN PROCESADOR "<<procesadorID<<endl;
-            
+                        
             int labFinal;
             int salaFinal;
             int bloqueFinal;
@@ -235,10 +236,10 @@ int main(int argc, char *argv[]){
                     //Se recorren todas las salas por cada DocenteCurso de INF    
                     for(int sala = primeraSala; sala < ultimaSala; sala++){
                         //Se recorren los días de la semana
-                        for(int dia = 0; dia < 6; dia++){
+                        for(int dia = 0; dia < DIAS; dia++){
                             //Si es un día de lunes a viernes
                             if(dia != 5){
-                                for(int bloque = 0; bloque < 7; bloque++){
+                                for(int bloque = 0; bloque < BLOQUES; bloque++){
                                     if(vectorSalasNOLAB[sala].retornaMatrizHorario()[bloque][dia] == "Disponible" && tieneDisponibilidad(bloque, dia, matrizDisponibilidadDocente)){
                                         
                                         vectorSalasNOLAB[sala].llenarBloque(codigoCurso, bloque, dia);
@@ -371,8 +372,15 @@ int main(int argc, char *argv[]){
                 }
                 
             }
-            
+
             escribirExcel(vectorHorarioSala,"HorarioCursoProfesores.xlsx");
+            cout<<endl<<"Se ha creado el archivo HorarioCursoProfesores.xlsx"<<endl;
+            
+            t1 = clock();
+
+            double time = (double(t1-t0)/CLOCKS_PER_SEC);
+            
+            cout << "Execution Time: " << time << " segundos. "<< endl<<endl;
                     
         }
         MPI_Finalize();   
@@ -382,5 +390,6 @@ int main(int argc, char *argv[]){
         cout<< " -d Docentes.xlsx -c Cursos.xlsx -s Salas.xlsx" <<endl;
         return EXIT_FAILURE;
     }
+    
     return 0;
 }
