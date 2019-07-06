@@ -14,6 +14,7 @@ class HorarioSala{
         HorarioSala(string);
         ~HorarioSala();
         void mostrarDatos();
+        bool esLAB();
         vector<vector<string>> retornaMatrizHorario();
         void llenarBloque(string, int, int);
         string retornaNombreSala();

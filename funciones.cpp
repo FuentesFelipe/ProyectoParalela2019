@@ -143,7 +143,12 @@ vector<DocenteCurso> llenarVectorDocenteCurso(const char* nombreArchivo){
                 }
 
                 if(numFila != 1){
+                    //Transformamos horas pedagógicas a Bloques
+                    if(bloques_disponibles_auxiliar>1) // Cazamos las horas pedagógicas distintas a 1
+                        bloques_disponibles_auxiliar = bloques_disponibles_auxiliar/2;
+
                     DocenteCurso *docenteCursoAuxiliar = new DocenteCurso(codigo_curso_auxiliar, id_docente_auxiliar, bloques_disponibles_auxiliar);
+                    
                     vectorDocenteCurso.push_back(*docenteCursoAuxiliar);
                     delete(docenteCursoAuxiliar);
                     docenteCursoAuxiliar = NULL;
@@ -582,9 +587,9 @@ bool tieneDisponibilidad(int bloque, int dia, vector<vector<bool>> matrizDisponi
     return tieneDisponibilidad;
 }
 
-void escribirExcel(vector<HorarioSala> vectorHorarioSala){
+void escribirExcel(vector<HorarioSala> vectorHorarioSala, const char* nombreArchivo){
 
-    lxw_workbook  *archivoExcel  = workbook_new("horario.xlsx");
+    lxw_workbook  *archivoExcel  = workbook_new(nombreArchivo);
 
     vector<string> primeraFila = {"Bloques/Días", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
     vector<string> primeraColumna = {"1", "2", "3", "4", "5", "6", "7"};

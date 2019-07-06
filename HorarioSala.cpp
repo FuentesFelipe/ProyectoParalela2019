@@ -21,15 +21,25 @@ void HorarioSala::mostrarDatos(){
     mostrarMatrizHorario(this->matriz_horario);
 }
 
+bool HorarioSala::esLAB(){
+    string primerosTresChar = "";
+    bool esLAB = false;
+    for(int i = 0; i < 3; i++){
+        primerosTresChar += this->nombre_sala[i];
+    }
+
+    if(primerosTresChar == "LAB")
+        esLAB = true;
+
+    return esLAB;
+}
+
 vector<vector<string>> HorarioSala::retornaMatrizHorario(){
     return this->matriz_horario;
 }
 
 void HorarioSala::llenarBloque(string identificadorDocente, int bloque, int dia){
-    if(this->matriz_horario[bloque][dia] == "Disponible"){
-        this->matriz_horario[bloque][dia] = identificadorDocente;
-    }
-
+    this->matriz_horario[bloque][dia] = identificadorDocente;
 }
 
 string HorarioSala::retornaNombreSala(){
