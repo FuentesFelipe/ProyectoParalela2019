@@ -49,7 +49,6 @@ cd xlsxio/
 
 ## Ejecución
 
-* Versión Paralela en la rama ParalelismoAlternativo
 
     *$ mpirun -np "numero de procesadores" ./programa -c Cursos.xlsx -s Salas.xlsx -d Docentes.xlsx
 
